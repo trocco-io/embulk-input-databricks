@@ -1,0 +1,10 @@
+# The catalog_name.schema_name and another_catalog_name.schema_name must be created in advance.
+# The another_catalog_name must be different from catalog_name.
+
+server_hostname: 
+http_path: 
+personal_access_token: 
+catalog_name: 
+schema_name: 
+table_prefix:
+another_catalog_name: 
