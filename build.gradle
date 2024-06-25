@@ -33,7 +33,7 @@ dependencies {
     compileOnly("org.embulk:embulk-api:${embulkVersion}")
     compileOnly("org.embulk:embulk-spi:${embulkVersion}")
     compile("org.embulk:embulk-input-jdbc:0.13.2")
-    compile('com.databricks:databricks-jdbc:2.6.38')
+    compile('com.databricks:databricks-jdbc:2.6.34')
 
     testImplementation "junit:junit:4.+"
     testImplementation "org.embulk:embulk-junit4:${embulkVersion}"

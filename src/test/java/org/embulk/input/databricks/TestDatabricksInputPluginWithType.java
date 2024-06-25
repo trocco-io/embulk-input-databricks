@@ -3,13 +3,13 @@ package org.embulk.input.databricks;
 import static org.embulk.input.databricks.util.TestingEmbulkUtil.assertTypeEquals;
 import static org.embulk.test.EmbulkTests.readSortedFile;
 
-import com.databricks.client.jdbc42.internal.google.common.collect.Streams;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.embulk.config.ConfigSource;
 import org.embulk.input.databricks.util.ColumnOptionData;
 import org.embulk.input.databricks.util.ConfigUtil;
@@ -124,8 +124,8 @@ public class TestDatabricksInputPluginWithType extends AbstractTestDatabricksInp
         String.format(
             "create table %s (%s)",
             quotedFullTableName,
-            Streams.mapWithIndex(
-                    Arrays.stream(testSets), (e, i) -> String.format("_c%d %s", i, e.tableType))
+            IntStream.range(0, testSets.length)
+                .mapToObj(i -> String.format("_c%d %s", i, testSets[i].tableType))
                 .collect(Collectors.joining(" ,"))),
         String.format(
             "INSERT INTO %s VALUES (%s)",
