@@ -1,0 +1,16 @@
+*~
+/pkg/
+/tmp/
+*.gemspec
+.gradle/
+/classpath/
+build/
+.idea
+/.settings/
+/.metadata/
+.classpath
+.project
+config.yml
+default_jdbc_driver
+/bin/
+example/test.yml

@@ -1,0 +1,81 @@
+plugins {
+    id "java"
+    id "maven-publish"
+    id "org.embulk.embulk-plugins" version "0.5.5"
+    id "com.palantir.git-version" version "0.13.0"
+    id "com.diffplug.spotless" version "5.15.0"
+    id "com.adarshr.test-logger" version "3.0.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = "io.trocco"
+description = "Loads records from Databricks."
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = {
+    def vd = versionDetails()
+    if (vd.commitDistance == 0 && vd.lastTag ==~ /^v[0-9]+\.[0-9]+\.[0-9]+(\.[a-zA-Z0-9]+)?/) {
+        vd.lastTag.substring(1)
+    } else {
+        "0.0.0.${vd.gitHash}"
+    }
+}()
+
+dependencies {
+    def embulkVersion = "0.10.36"
+
+    compileOnly("org.embulk:embulk-api:${embulkVersion}")
+    compileOnly("org.embulk:embulk-spi:${embulkVersion}")
+    compile("org.embulk:embulk-input-jdbc:0.13.2")
+    compile('com.databricks:databricks-jdbc:2.6.34')
+
+    testImplementation "junit:junit:4.+"
+    testImplementation "org.embulk:embulk-junit4:${embulkVersion}"
+    testImplementation "org.embulk:embulk-core:${embulkVersion}"
+    testImplementation "org.embulk:embulk-deps:${embulkVersion}"
+    testImplementation "org.embulk:embulk-formatter-csv:${embulkVersion}"
+    testImplementation "org.embulk:embulk-output-file:${embulkVersion}"
+
+    //SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    //SLF4J: Defaulting to no-operation (NOP) logger implementation
+    //SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+    testImplementation("org.slf4j:slf4j-simple:1.7.30")
+}
+
+embulkPlugin {
+    mainClass = "org.embulk.input.DatabricksInputPlugin"
+    category = "input"
+    type = "databricks"
+}
+
+test {
+    environment "TZ", "UTC"
+}
+
+clean {
+    delete "classpath"
+    delete 'default_jdbc_driver'
+}
+
+gem {
+    from("LICENSE.txt")
+    authors = [ "" ]
+    email = [ "" ]
+    summary = "Databricks input plugin for Embulk"
+    homepage = "https://github.com/trocco-io/embulk-input-databricks"
+    licenses = [ "MIT" ]
+}
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat()
+        toggleOffOn()
+    }
+}
+
