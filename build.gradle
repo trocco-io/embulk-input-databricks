@@ -1,7 +1,6 @@
 plugins {
     id "java"
     id "maven-publish"
-    id "checkstyle"
     id "org.embulk.embulk-plugins" version "0.5.5"
     id "com.palantir.git-version" version "0.13.0"
     id "com.diffplug.spotless" version "5.15.0"
@@ -61,19 +60,6 @@ test {
 clean {
     delete "classpath"
     delete 'default_jdbc_driver'
-}
-
-checkstyle {
-    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
-    toolVersion = '6.14.1'
-}
-checkstyleMain {
-    configFile = file("${project.rootDir}/config/checkstyle/default.xml")
-    ignoreFailures = true
-}
-checkstyleTest {
-    configFile = file("${project.rootDir}/config/checkstyle/default.xml")
-    ignoreFailures = true
 }
 
 gem {
