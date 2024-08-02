@@ -74,6 +74,8 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     if (t.getSchemaName().isPresent()) {
       props.put("ConnSchema", t.getSchemaName().get());
     }
+    props.putAll(t.getOptions());
+
     logConnectionProperties(url, props);
     Connection c = DriverManager.getConnection(url, props);
     return new DatabricksInputConnection(
