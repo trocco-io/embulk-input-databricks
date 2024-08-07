@@ -3,6 +3,7 @@ package org.embulk.input;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import org.embulk.config.ConfigException;
@@ -39,6 +40,10 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     @Config("schema_name")
     @ConfigDefault("null")
     public Optional<String> getSchemaName();
+
+    @Config("user_agent")
+    @ConfigDefault("null")
+    public Optional<Map<String, String>> getUserAgent();
   }
 
   @Override
@@ -75,6 +80,13 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
       props.put("ConnSchema", t.getSchemaName().get());
     }
     props.putAll(t.getOptions());
+    // overwrite UserAgentEntry property if the same property is set in options
+    if (t.getUserAgent().isPresent()) {
+      String product_name = t.getUserAgent().get().get("product_name");
+      String product_version = t.getUserAgent().get().get("product_version");
+
+      props.put("UserAgentEntry", product_name + "/" + product_version);
+    }
 
     logConnectionProperties(url, props);
     Connection c = DriverManager.getConnection(url, props);
