@@ -3,7 +3,6 @@ package org.embulk.input;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import org.embulk.config.ConfigException;
@@ -12,6 +11,7 @@ import org.embulk.input.jdbc.JdbcInputConnection;
 import org.embulk.spi.Schema;
 import org.embulk.util.config.Config;
 import org.embulk.util.config.ConfigDefault;
+import org.embulk.util.config.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +42,18 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     public Optional<String> getSchemaName();
 
     @Config("user_agent")
-    @ConfigDefault("null")
-    public Optional<Map<String, String>> getUserAgent();
+    @ConfigDefault("{}")
+    public Optional<UserAgentEntry> getUserAgent();
+
+    public interface UserAgentEntry extends Task {
+      @Config("product_name")
+      @ConfigDefault("\"unknown\"")
+      public String getProductName();
+
+      @Config("product_version")
+      @ConfigDefault("\"0.0.0\"")
+      public String getProductVersion();
+    }
   }
 
   @Override
@@ -82,8 +92,8 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     props.putAll(t.getOptions());
     // overwrite UserAgentEntry property if the same property is set in options
     if (t.getUserAgent().isPresent()) {
-      String product_name = t.getUserAgent().get().get("product_name");
-      String product_version = t.getUserAgent().get().get("product_version");
+      String product_name = t.getUserAgent().get().getProductName();
+      String product_version = t.getUserAgent().get().getProductVersion();
 
       props.put("UserAgentEntry", product_name + "/" + product_version);
     }
