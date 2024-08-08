@@ -43,9 +43,9 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
 
     @Config("user_agent")
     @ConfigDefault("{}")
-    public Optional<UserAgentEntry> getUserAgent();
+    public UserAgent getUserAgent();
 
-    public interface UserAgentEntry extends Task {
+    public interface UserAgent extends Task {
       @Config("product_name")
       @ConfigDefault("\"unknown\"")
       public String getProductName();
