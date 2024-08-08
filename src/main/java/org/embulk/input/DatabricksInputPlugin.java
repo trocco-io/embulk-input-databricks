@@ -43,9 +43,9 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
 
     @Config("user_agent")
     @ConfigDefault("{}")
-    public UserAgent getUserAgent();
+    public UserAgentEntry getUserAgentEntry();
 
-    public interface UserAgent extends Task {
+    public interface UserAgentEntry extends Task {
       @Config("product_name")
       @ConfigDefault("\"unknown\"")
       public String getProductName();
@@ -91,9 +91,9 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     }
     props.putAll(t.getOptions());
     // overwrite UserAgentEntry property if the same property is set in options
-    if (t.getUserAgent().isPresent()) {
-      String product_name = t.getUserAgent().get().getProductName();
-      String product_version = t.getUserAgent().get().getProductVersion();
+    if (t.getUserAgentEntry() != null) {
+      String product_name = t.getUserAgentEntry().getProductName();
+      String product_version = t.getUserAgentEntry().getProductVersion();
 
       props.put("UserAgentEntry", product_name + "/" + product_version);
     }
