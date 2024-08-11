@@ -5,6 +5,7 @@ plugins {
     id "com.palantir.git-version" version "0.13.0"
     id "com.diffplug.spotless" version "5.15.0"
     id "com.adarshr.test-logger" version "3.0.0"
+    id "com.github.johnrengelman.shadow" version "6.0.0" apply false
 }
 
 repositories {
@@ -32,7 +33,7 @@ dependencies {
     compileOnly("org.embulk:embulk-api:${embulkVersion}")
     compileOnly("org.embulk:embulk-spi:${embulkVersion}")
     compile("org.embulk:embulk-input-jdbc:0.13.2")
-    compile('com.databricks:databricks-jdbc:2.6.38')
+    compile project(path: ":shadow-databricks-jdbc", configuration: "shadow")
 
     testImplementation "junit:junit:4.+"
     testImplementation "org.embulk:embulk-junit4:${embulkVersion}"
