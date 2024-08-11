@@ -32,7 +32,7 @@ dependencies {
     compileOnly("org.embulk:embulk-api:${embulkVersion}")
     compileOnly("org.embulk:embulk-spi:${embulkVersion}")
     compile("org.embulk:embulk-input-jdbc:0.13.2")
-    compile('com.databricks:databricks-jdbc:2.6.34')
+    compile('com.databricks:databricks-jdbc:2.6.38')
 
     testImplementation "junit:junit:4.+"
     testImplementation "org.embulk:embulk-junit4:${embulkVersion}"
@@ -41,9 +41,10 @@ dependencies {
     testImplementation "org.embulk:embulk-formatter-csv:${embulkVersion}"
     testImplementation "org.embulk:embulk-output-file:${embulkVersion}"
 
-    //SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-    //SLF4J: Defaulting to no-operation (NOP) logger implementation
-    //SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+    // Supress following logs in gradlew test.
+    // SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    // SLF4J: Defaulting to no-operation (NOP) logger implementation
+    // SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
 

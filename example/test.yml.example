@@ -4,7 +4,9 @@
 server_hostname: 
 http_path: 
 personal_access_token: 
+oauth2_client_id: 
+oauth2_client_secret: 
 catalog_name: 
 schema_name: 
-table_prefix:
+table_prefix: 
 another_catalog_name: 
