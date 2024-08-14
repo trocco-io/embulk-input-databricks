@@ -137,9 +137,11 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     return super.setupTask(con, task);
   }
 
-  private boolean isSetUserAgentEntry(boolean isSetUserAgentEntryInOptions, String productName, String productVersion) {
-    boolean isDefaultUserAgent = (productName.equals(UserAgentEntry.defaultProductName)
-        || productVersion.equals(UserAgentEntry.defaultProductVersion));
+  private boolean isSetUserAgentEntry(
+      boolean isSetUserAgentEntryInOptions, String productName, String productVersion) {
+    boolean isDefaultUserAgent =
+        (productName.equals(UserAgentEntry.defaultProductName)
+            || productVersion.equals(UserAgentEntry.defaultProductVersion));
     return !(isSetUserAgentEntryInOptions && isDefaultUserAgent);
   }
 }
