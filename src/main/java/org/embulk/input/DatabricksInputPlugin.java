@@ -46,9 +46,6 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     public UserAgentEntry getUserAgentEntry();
 
     public interface UserAgentEntry extends Task {
-      String defaultProductName = "unknown";
-      String defaultProductVersion = "0.0.0";
-
       @Config("product_name")
       @ConfigDefault("\"unknown\"")
       public String getProductName();
