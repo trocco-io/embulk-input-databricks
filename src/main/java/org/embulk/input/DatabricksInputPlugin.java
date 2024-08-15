@@ -44,19 +44,19 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     @Config("user_agent")
     @ConfigDefault("{}")
     public UserAgentEntry getUserAgentEntry();
-  }
 
-  public interface UserAgentEntry extends Task {
-    String defaultProductName = "unknown";
-    String defaultProductVersion = "0.0.0";
+    public interface UserAgentEntry extends Task {
+      String defaultProductName = "unknown";
+      String defaultProductVersion = "0.0.0";
 
-    @Config("product_name")
-    @ConfigDefault("\"unknown\"")
-    public String getProductName();
+      @Config("product_name")
+      @ConfigDefault("\"unknown\"")
+      public String getProductName();
 
-    @Config("product_version")
-    @ConfigDefault("\"0.0.0\"")
-    public String getProductVersion();
+      @Config("product_version")
+      @ConfigDefault("\"0.0.0\"")
+      public String getProductVersion();
+    }
   }
 
   @Override
@@ -94,13 +94,10 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
     }
     props.putAll(t.getOptions());
 
+    // overwrite UserAgentEntry property if the same property is set in options
     String productName = t.getUserAgentEntry().getProductName();
     String productVersion = t.getUserAgentEntry().getProductVersion();
-    boolean isSetUserAgentEntryInOptions = props.containsKey("UserAgentEntry");
-    // overwrite UserAgentEntry property if the same property is set in options
-    if (isSetUserAgentEntry(isSetUserAgentEntryInOptions, productName, productVersion)) {
-      props.put("UserAgentEntry", productName + "/" + productVersion);
-    }
+    props.put("UserAgentEntry", productName + "/" + productVersion);
 
     logConnectionProperties(url, props);
     Connection c = DriverManager.getConnection(url, props);
@@ -135,13 +132,5 @@ public class DatabricksInputPlugin extends AbstractJdbcInputPlugin {
       throw new ConfigException("use_raw_query_with_incremental option is not supported.");
     }
     return super.setupTask(con, task);
-  }
-
-  private boolean isSetUserAgentEntry(
-      boolean isSetUserAgentEntryInOptions, String productName, String productVersion) {
-    boolean isDefaultUserAgent =
-        (productName.equals(UserAgentEntry.defaultProductName)
-            || productVersion.equals(UserAgentEntry.defaultProductVersion));
-    return !(isSetUserAgentEntryInOptions && isDefaultUserAgent);
   }
 }
