@@ -40,6 +40,12 @@ public class ConfigUtil {
     @Config("personal_access_token")
     public String getPersonalAccessToken();
 
+    @Config("oauth2_client_id")
+    public String getOauth2ClientId();
+
+    @Config("oauth2_client_secret")
+    public String getOauth2ClientSecret();
+
     @Config("catalog_name")
     public String getCatalogName();
 
@@ -80,11 +86,14 @@ public class ConfigUtil {
     return createTableName(UUID.randomUUID().toString());
   }
 
+  public static ConfigSource emptyConfigSource() {
+    return CONFIG_MAPPER_FACTORY.newConfigSource();
+  }
+
   public static ConfigSource createBasePluginConfigSource() {
     final TestTask t = createTestTask();
 
-    return CONFIG_MAPPER_FACTORY
-        .newConfigSource()
+    return emptyConfigSource()
         .set("type", "databricks")
         .set("server_hostname", t.getServerHostname())
         .set("http_path", t.getHTTPPath())

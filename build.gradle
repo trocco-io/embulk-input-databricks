@@ -5,6 +5,7 @@ plugins {
     id "com.palantir.git-version" version "0.13.0"
     id "com.diffplug.spotless" version "5.15.0"
     id "com.adarshr.test-logger" version "3.0.0"
+    id "com.github.johnrengelman.shadow" version "6.0.0" apply false
 }
 
 repositories {
@@ -32,7 +33,7 @@ dependencies {
     compileOnly("org.embulk:embulk-api:${embulkVersion}")
     compileOnly("org.embulk:embulk-spi:${embulkVersion}")
     compile("org.embulk:embulk-input-jdbc:0.13.2")
-    compile('com.databricks:databricks-jdbc:2.6.34')
+    compile project(path: ":shadow-databricks-jdbc", configuration: "shadow")
 
     testImplementation "junit:junit:4.+"
     testImplementation "org.embulk:embulk-junit4:${embulkVersion}"
@@ -41,9 +42,10 @@ dependencies {
     testImplementation "org.embulk:embulk-formatter-csv:${embulkVersion}"
     testImplementation "org.embulk:embulk-output-file:${embulkVersion}"
 
-    //SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-    //SLF4J: Defaulting to no-operation (NOP) logger implementation
-    //SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+    // Supress following logs in gradlew test.
+    // SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    // SLF4J: Defaulting to no-operation (NOP) logger implementation
+    // SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
     testImplementation("org.slf4j:slf4j-simple:1.7.30")
 }
 
